@@ -55,6 +55,24 @@
     .nav-i { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; }
     .nav-logo { font-family: var(--fd); font-size: 1.2rem; font-weight: 500; display: flex; align-items: center; gap: .4em; }
     .nav-logo b { color: var(--green); font-weight: 700; }
+    .nav-right { display: flex; align-items: center; gap: .75rem; }
+
+    /* Language toggle */
+    .lang-btn {
+      display: flex; align-items: center; gap: 0;
+      background: var(--warm-50); border: 1px solid var(--warm-100);
+      border-radius: 99px; overflow: hidden; font-family: var(--fu);
+      font-size: .78rem; font-weight: 500; cursor: pointer;
+    }
+    .lang-opt {
+      padding: .45em .85em; border: none; background: none;
+      cursor: pointer; font-family: var(--fu); font-size: .78rem;
+      font-weight: 500; color: var(--muted); transition: background .15s, color .15s;
+    }
+    .lang-opt.active {
+      background: var(--green); color: #fff; border-radius: 99px;
+    }
+    .lang-opt:hover:not(.active) { color: var(--green); }
 
     /* HERO */
     .hero { padding: 5rem 0 0; position: relative; overflow: hidden; }
@@ -123,7 +141,6 @@
     .pts { list-style: none; display: flex; flex-direction: column; gap: .85rem; }
     .pts li { display: flex; gap: .85rem; align-items: flex-start; font-family: var(--fu); font-size: .93rem; }
     .pt-ic { width: 32px; height: 32px; border-radius: 50%; background: var(--green); color: #fff; flex-shrink: 0; display: grid; place-items: center; font-size: .85rem; margin-top: 1px; }
-    /* Timeline */
     .tl { display: flex; flex-direction: column; position: relative; }
     .tl::before { content:''; position: absolute; left: 21px; top: 20px; bottom: 20px; width: 2px; background: linear-gradient(to bottom, var(--green-mid), var(--green), var(--green-mid)); }
     .tl-it { display: flex; gap: 1rem; align-items: flex-start; padding: .9rem 0; position: relative; }
@@ -226,6 +243,8 @@
       .ai-g { grid-template-columns: 1fr; }
       .foot-i { flex-direction: column; text-align: center; }
       .fl { justify-content: center; }
+      .nav-right { gap: .5rem; }
+      .lang-opt { padding: .4em .65em; }
     }
   </style>
 </head>
@@ -234,7 +253,13 @@
 <nav>
   <div class="wrap nav-i">
     <a class="nav-logo" href="#">🍽️ My Fav <b>Meal</b></a>
-    <a class="btn btn-o" style="font-size:.88rem;padding:.6em 1.4em;" href="https://lekkerstemmen.app">Inloggen →</a>
+    <div class="nav-right">
+      <div class="lang-btn" role="group" aria-label="Language">
+        <button class="lang-opt active" onclick="setLang('nl')" id="btn-nl">NL</button>
+        <button class="lang-opt" onclick="setLang('en')" id="btn-en">EN</button>
+      </div>
+      <a class="btn btn-o" style="font-size:.88rem;padding:.6em 1.4em;" href="https://lekkerstemmen.app" data-t="nav_login">Inloggen →</a>
+    </div>
   </div>
 </nav>
 
@@ -243,26 +268,26 @@
   <div class="blob1"></div><div class="blob2"></div>
   <div class="wrap hero-i">
     <div class="hero-copy">
-      <div class="hero-tag">🍳 Jouw persoonlijk kookgeheugen</div>
-      <h1 class="hd">Onthoud wat je kookt.<br>Leer wat je <em>echt</em> lekker vindt.</h1>
-      <p class="hero-sub">My Fav Meal bouwt een levende receptenbibliotheek voor jou op — inclusief kookhistorie, persoonlijke notities en AI-tips om elk gerecht de volgende keer nóg beter te maken.</p>
+      <div class="hero-tag" data-t="hero_tag">🍳 Jouw persoonlijk kookgeheugen</div>
+      <h1 class="hd" data-t="hero_h1">Onthoud wat je kookt.<br>Leer wat je <em>echt</em> lekker vindt.</h1>
+      <p class="hero-sub" data-t="hero_sub">My Fav Meal bouwt een levende receptenbibliotheek voor jou op — inclusief kookhistorie, persoonlijke notities en AI-tips om elk gerecht de volgende keer nóg beter te maken.</p>
       <div class="hero-act">
-        <a class="btn btn-g" href="https://lekkerstemmen.app?utm_source=landing&utm_medium=cta&utm_campaign=hero" onclick="plausible&&plausible('CTA Hero Click')">Gratis starten →</a>
+        <a class="btn btn-g" href="https://lekkerstemmen.app?utm_source=landing&utm_medium=cta&utm_campaign=hero" onclick="plausible&&plausible('CTA Hero Click')" data-t="cta_hero">Gratis starten →</a>
       </div>
-      <p class="hero-fn"><span>✓</span> Geen app store &nbsp;·&nbsp; <span>✓</span> iPhone & Android &nbsp;·&nbsp; <span>✓</span> Gratis</p>
+      <p class="hero-fn" data-t="hero_fn"><span>✓</span> Geen app store &nbsp;·&nbsp; <span>✓</span> iPhone & Android &nbsp;·&nbsp; <span>✓</span> Gratis</p>
     </div>
     <div class="hero-vis">
-      <div class="fbadge"><span class="fdot"></span>AI-tip klaar voor vanavond ✨</div>
+      <div class="fbadge"><span class="fdot"></span><span data-t="badge">AI-tip klaar voor vanavond ✨</span></div>
       <div class="rc">
         <div class="rc-img">🍝<div class="rc-img-ov"></div><span class="rc-img-name">Spaghetti carbonara</span><span class="rc-img-sc">😋 4.6</span></div>
         <div class="rc-body">
-          <div class="rc-chips"><span class="chip">⏱ 25 min</span><span class="chip">👥 4 pers.</span><span class="chip">6× gekookt</span></div>
-          <div class="rc-nl">Jouw aantekeningen</div>
-          <div class="rc-note">"Vorige keer iets te zout — minder pancetta én geen extra zout in het pastawater."</div>
+          <div class="rc-chips"><span class="chip" data-t="chip1">⏱ 25 min</span><span class="chip" data-t="chip2">👥 4 pers.</span><span class="chip" data-t="chip3">6× gekookt</span></div>
+          <div class="rc-nl" data-t="notes_label">Jouw aantekeningen</div>
+          <div class="rc-note" data-t="notes_text">"Vorige keer iets te zout — minder pancetta én geen extra zout in het pastawater."</div>
         </div>
       </div>
       <div class="hs">
-        <span class="hs-lbl">Historie</span>
+        <span class="hs-lbl" data-t="history_label">Historie</span>
         <div class="hs-dots">
           <div class="hd2 hi">😋</div><div class="hd2 ok">😐</div>
           <div class="hd2 hi">😋</div><div class="hd2 hi">😋</div>
@@ -277,10 +302,10 @@
 <!-- STATS -->
 <div class="stats">
   <div class="wrap stats-i">
-    <div class="st"><span class="st-n">📖</span><span class="st-d">Eigen receptenbibliotheek</span></div>
-    <div class="st"><span class="st-n">📝</span><span class="st-d">Notities per kookbeurt</span></div>
-    <div class="st"><span class="st-n">✦</span><span class="st-d">AI-verbeteradvies</span></div>
-    <div class="st"><span class="st-n">🗓</span><span class="st-d">Weekmenu planner</span></div>
+    <div class="st"><span class="st-n">📖</span><span class="st-d" data-t="stat1">Eigen receptenbibliotheek</span></div>
+    <div class="st"><span class="st-n">📝</span><span class="st-d" data-t="stat2">Notities per kookbeurt</span></div>
+    <div class="st"><span class="st-n">✦</span><span class="st-d" data-t="stat3">AI-verbeteradvies</span></div>
+    <div class="st"><span class="st-n">🗓</span><span class="st-d" data-t="stat4">Weekmenu planner</span></div>
   </div>
 </div>
 
@@ -288,25 +313,25 @@
 <section class="how">
   <div class="wrap">
     <div class="how-h">
-      <span class="lbl">Zo werkt het</span>
-      <h2 class="hd">Van recept tot rijke kookhistorie</h2>
-      <p>Elke maaltijd die je maakt, maakt je bibliotheek slimmer — en jou een betere kok.</p>
+      <span class="lbl" data-t="how_lbl">Zo werkt het</span>
+      <h2 class="hd" data-t="how_h2">Van recept tot rijke kookhistorie</h2>
+      <p data-t="how_sub">Elke maaltijd die je maakt, maakt je bibliotheek slimmer — en jou een betere kok.</p>
     </div>
     <div class="how-g">
       <div class="how-s fu">
         <div class="how-ic">📖</div>
-        <h3>Voeg recepten toe</h3>
-        <p>Maak een foto en AI herkent het gerecht, vult ingrediënten en recept automatisch in. Of typ een naam en laat AI een recept schrijven.</p>
+        <h3 data-t="how1_h">Voeg recepten toe</h3>
+        <p data-t="how1_p">Maak een foto en AI herkent het gerecht, vult ingrediënten en recept automatisch in. Of typ een naam en laat AI een recept schrijven.</p>
       </div>
       <div class="how-s fu d1">
         <div class="how-ic">🍳</div>
-        <h3>Kook & maak een notitie</h3>
-        <p>Tijdens of na het koken schrijf je wat je opviel — te zout, te kort gebakken, anders gekruid. Precies wat je de volgende keer wil onthouden.</p>
+        <h3 data-t="how2_h">Kook & maak een notitie</h3>
+        <p data-t="how2_p">Tijdens of na het koken schrijf je wat je opviel — te zout, te kort gebakken, anders gekruid. Precies wat je de volgende keer wil onthouden.</p>
       </div>
       <div class="how-s fu d2">
         <div class="how-ic">✨</div>
-        <h3>Word beter, elke keer</h3>
-        <p>De volgende keer zie je direct je eigen notities en een AI-tip op basis van je hele kookhistorie. Elk gerecht ontwikkelt zich.</p>
+        <h3 data-t="how3_h">Word beter, elke keer</h3>
+        <p data-t="how3_p">De volgende keer zie je direct je eigen notities en een AI-tip op basis van je hele kookhistorie. Elk gerecht ontwikkelt zich.</p>
       </div>
     </div>
   </div>
@@ -316,42 +341,42 @@
 <section class="hist-sec">
   <div class="wrap hist-i">
     <div class="hist-copy fu">
-      <span class="lbl">Kookhistorie</span>
-      <h2 class="hd">Jouw <em>persoonlijk</em><br>kookdagboek</h2>
-      <p>Elke keer dat je een gerecht maakt, groeit je kennis. My Fav Meal onthoudt hoe elk gerecht smaakte, wat je erover schreef en hoe het zich over de tijd ontwikkelt. De volgende keer lees je precies terug wat je anders wilde doen.</p>
+      <span class="lbl" data-t="hist_lbl">Kookhistorie</span>
+      <h2 class="hd" data-t="hist_h2">Jouw <em>persoonlijk</em><br>kookdagboek</h2>
+      <p data-t="hist_p">Elke keer dat je een gerecht maakt, groeit je kennis. My Fav Meal onthoudt hoe elk gerecht smaakte, wat je erover schreef en hoe het zich over de tijd ontwikkelt. De volgende keer lees je precies terug wat je anders wilde doen.</p>
       <ul class="pts">
-        <li><span class="pt-ic">📝</span><span>Schrijf een notitie per kookbeurt — wat je anders deed, wil proberen of aanpassen</span></li>
-        <li><span class="pt-ic">📈</span><span>Zie hoe je beoordeling van een gerecht over meerdere kookbeurten verbetert</span></li>
-        <li><span class="pt-ic">✦</span><span>AI leest je notities en geeft een concreet verbeter-advies vóórdat je de keuken in gaat</span></li>
-        <li><span class="pt-ic">🗓</span><span>Plan je weekmenu op basis van wat jullie écht graag eten</span></li>
+        <li><span class="pt-ic">📝</span><span data-t="hist_pt1">Schrijf een notitie per kookbeurt — wat je anders deed, wil proberen of aanpassen</span></li>
+        <li><span class="pt-ic">📈</span><span data-t="hist_pt2">Zie hoe je beoordeling van een gerecht over meerdere kookbeurten verbetert</span></li>
+        <li><span class="pt-ic">✦</span><span data-t="hist_pt3">AI leest je notities en geeft een concreet verbeter-advies vóórdat je de keuken in gaat</span></li>
+        <li><span class="pt-ic">🗓</span><span data-t="hist_pt4">Plan je weekmenu op basis van wat jullie écht graag eten</span></li>
       </ul>
     </div>
     <div class="tl fu d1">
       <div class="tl-it">
         <div class="tl-dot">🍝</div>
         <div class="tl-bd">
-          <div class="tl-dt">3 weken geleden</div>
+          <div class="tl-dt" data-t="tl1_dt">3 weken geleden</div>
           <div class="tl-ti">Spaghetti carbonara</div>
-          <div class="tl-nt">"Te zout, iets minder pancetta volgende keer."</div>
+          <div class="tl-nt" data-t="tl1_nt">"Te zout, iets minder pancetta volgende keer."</div>
           <div class="tl-sc"><span class="sr">★</span><span class="sr">★</span><span class="sr">★</span><span class="sr d">★</span><span class="sr d">★</span></div>
         </div>
       </div>
       <div class="tl-it">
         <div class="tl-dot">🍝</div>
         <div class="tl-bd">
-          <div class="tl-dt">2 weken geleden</div>
+          <div class="tl-dt" data-t="tl2_dt">2 weken geleden</div>
           <div class="tl-ti">Spaghetti carbonara</div>
-          <div class="tl-nt">"Guanciale geprobeerd in plaats van pancetta — beter!"</div>
+          <div class="tl-nt" data-t="tl2_nt">"Guanciale geprobeerd in plaats van pancetta — beter!"</div>
           <div class="tl-sc"><span class="sr">★</span><span class="sr">★</span><span class="sr">★</span><span class="sr">★</span><span class="sr d">★</span></div>
         </div>
       </div>
       <div class="tl-it">
         <div class="tl-dot on">🍝</div>
         <div class="tl-bd">
-          <div class="tl-dt">Vanavond</div>
+          <div class="tl-dt" data-t="tl3_dt">Vanavond</div>
           <div class="tl-ti">Spaghetti carbonara</div>
           <div class="tl-sc"><span class="sr d">★</span><span class="sr d">★</span><span class="sr d">★</span><span class="sr d">★</span><span class="sr d">★</span></div>
-          <div class="tl-tip">✦ <span><b>AI-tip:</b> Voeg ei en kaas van het vuur toe voor een romige saus — voorkomt dat het stolt.</span></div>
+          <div class="tl-tip">✦ <span data-t="tl3_tip"><b>AI-tip:</b> Voeg ei en kaas van het vuur toe voor een romige saus — voorkomt dat het stolt.</span></div>
         </div>
       </div>
     </div>
@@ -362,43 +387,43 @@
 <section class="feats">
   <div class="wrap">
     <div class="feats-h">
-      <span class="lbl">Alles in één app</span>
-      <h2 class="hd">Wat je krijgt</h2>
-      <p>Van recepten opslaan tot weekmenu plannen — My Fav Meal heeft het allemaal.</p>
+      <span class="lbl" data-t="feat_lbl">Alles in één app</span>
+      <h2 class="hd" data-t="feat_h2">Wat je krijgt</h2>
+      <p data-t="feat_sub">Van recepten opslaan tot weekmenu plannen — My Fav Meal heeft het allemaal.</p>
     </div>
     <div class="fg">
       <div class="fc w2 fu">
         <div class="fc-em">📸</div>
-        <h3>Foto → volledig recept</h3>
-        <p>Maak een foto van je gerecht. AI herkent wat het is en vult naam, ingrediënten en bereidingswijze automatisch in. Je bibliotheek groeit zonder tikwerk.</p>
+        <h3 data-t="f1_h">Foto → volledig recept</h3>
+        <p data-t="f1_p">Maak een foto van je gerecht. AI herkent wat het is en vult naam, ingrediënten en bereidingswijze automatisch in. Je bibliotheek groeit zonder tikwerk.</p>
         <span class="fc-tag">AI-powered</span>
       </div>
       <div class="fc w2 fu d1">
         <div class="fc-em">🗓</div>
-        <h3>Weekmenu plannen</h3>
-        <p>Stel het weekmenu samen uit je eigen receptenbibliotheek. Zie per dag wie thuis is, wie sport heeft en hoeveel tijd je hebt om te koken.</p>
-        <span class="fc-tag">Planning</span>
+        <h3 data-t="f2_h">Weekmenu plannen</h3>
+        <p data-t="f2_p">Stel het weekmenu samen uit je eigen receptenbibliotheek. Zie per dag wie thuis is, wie sport heeft en hoeveel tijd je hebt om te koken.</p>
+        <span class="fc-tag" data-t="f2_tag">Planning</span>
       </div>
       <div class="fc fu">
         <div class="fc-em">🛒</div>
-        <h3>Boodschappenlijst</h3>
-        <p>Selecteer de dagen en AI genereert een complete boodschappenlijst die je kunt delen of kopiëren.</p>
+        <h3 data-t="f3_h">Boodschappenlijst</h3>
+        <p data-t="f3_p">Selecteer de dagen en AI genereert een complete boodschappenlijst die je kunt delen of kopiëren.</p>
       </div>
       <div class="fc fu d1">
         <div class="fc-em">📊</div>
-        <h3>Statistieken</h3>
-        <p>Zie welke gerechten het populairst zijn en hoe je smaak zich over tijd ontwikkelt.</p>
+        <h3 data-t="f4_h">Statistieken</h3>
+        <p data-t="f4_p">Zie welke gerechten het populairst zijn en hoe je smaak zich over tijd ontwikkelt.</p>
       </div>
       <div class="fc fu d2">
         <div class="fc-em">👨‍👩‍👧</div>
-        <h3>Voor het hele gezin</h3>
-        <p>Gezinsleden stemmen op hun favorieten. De kok stelt het weekmenu samen op basis van de stemmen — eerlijk en gezellig.</p>
-        <span class="fc-tag">Gezinsvriendelijk</span>
+        <h3 data-t="f5_h">Voor het hele gezin</h3>
+        <p data-t="f5_p">Gezinsleden stemmen op hun favorieten. De kok stelt het weekmenu samen op basis van de stemmen — eerlijk en gezellig.</p>
+        <span class="fc-tag" data-t="f5_tag">Gezinsvriendelijk</span>
       </div>
       <div class="fc fu d3">
         <div class="fc-em">🤝</div>
-        <h3>Recepten delen</h3>
-        <p>Koppel bevriende gezinnen via een code en wissel recepten uit voor nieuwe inspiratie.</p>
+        <h3 data-t="f6_h">Recepten delen</h3>
+        <p data-t="f6_p">Koppel bevriende gezinnen via een code en wissel recepten uit voor nieuwe inspiratie.</p>
       </div>
     </div>
   </div>
@@ -408,22 +433,22 @@
 <section class="ai">
   <div class="wrap ai-i">
     <div class="ai-c">
-      <span class="lbl">AI-assistent</span>
-      <h2 class="hd">Een slimme kok<br><em>die jou kent</em></h2>
-      <p>My Fav Meal leert van elke maaltijd die je maakt. Hoe meer je kookt, hoe persoonlijker het advies — zonder dat je er iets extra voor hoeft te doen.</p>
+      <span class="lbl" data-t="ai_lbl">AI-assistent</span>
+      <h2 class="hd" data-t="ai_h2">Een slimme kok<br><em>die jou kent</em></h2>
+      <p data-t="ai_p">My Fav Meal leert van elke maaltijd die je maakt. Hoe meer je kookt, hoe persoonlijker het advies — zonder dat je er iets extra voor hoeft te doen.</p>
       <div class="ai-pills">
-        <span class="ai-pl">📸 Gerecht herkennen</span>
-        <span class="ai-pl">✦ Kooktips op maat</span>
-        <span class="ai-pl">🛒 Boodschappenlijst</span>
-        <span class="ai-pl">📈 Smaakanalyse</span>
-        <span class="ai-pl">📝 Receptgeneratie</span>
+        <span class="ai-pl" data-t="pill1">📸 Gerecht herkennen</span>
+        <span class="ai-pl" data-t="pill2">✦ Kooktips op maat</span>
+        <span class="ai-pl" data-t="pill3">🛒 Boodschappenlijst</span>
+        <span class="ai-pl" data-t="pill4">📈 Smaakanalyse</span>
+        <span class="ai-pl" data-t="pill5">📝 Receptgeneratie</span>
       </div>
     </div>
     <div class="ai-g">
-      <div class="ai-card fu"><div class="ai-card-ic">📸</div><h4>Foto herkenning</h4><p>Foto maken = recept klaar. AI vult alles automatisch in.</p></div>
-      <div class="ai-card fu d1"><div class="ai-card-ic">✦</div><h4>Verbeter-advies</h4><p>Op basis van jouw notities geeft AI een concreet kooktip.</p></div>
-      <div class="ai-card fu d2"><div class="ai-card-ic">📝</div><h4>Recept genereren</h4><p>Typ een gerechtnaam — AI schrijft een volledig recept.</p></div>
-      <div class="ai-card fu d3"><div class="ai-card-ic">📊</div><h4>Eetpatroon analyse</h4><p>Persoonlijk inzicht in wat je graag eet en wanneer.</p></div>
+      <div class="ai-card fu"><div class="ai-card-ic">📸</div><h4 data-t="aic1_h">Foto herkenning</h4><p data-t="aic1_p">Foto maken = recept klaar. AI vult alles automatisch in.</p></div>
+      <div class="ai-card fu d1"><div class="ai-card-ic">✦</div><h4 data-t="aic2_h">Verbeter-advies</h4><p data-t="aic2_p">Op basis van jouw notities geeft AI een concreet kooktip.</p></div>
+      <div class="ai-card fu d2"><div class="ai-card-ic">📝</div><h4 data-t="aic3_h">Recept genereren</h4><p data-t="aic3_p">Typ een gerechtnaam — AI schrijft een volledig recept.</p></div>
+      <div class="ai-card fu d3"><div class="ai-card-ic">📊</div><h4 data-t="aic4_h">Eetpatroon analyse</h4><p data-t="aic4_p">Persoonlijk inzicht in wat je graag eet en wanneer.</p></div>
     </div>
   </div>
 </section>
@@ -432,25 +457,25 @@
 <section class="testi">
   <div class="wrap">
     <div class="testi-h">
-      <span class="lbl">Ervaringen</span>
-      <h2 class="hd">Wat gebruikers zeggen</h2>
-      <p>Al honderden kookliefhebbers en gezinnen plannen slimmer.</p>
+      <span class="lbl" data-t="testi_lbl">Ervaringen</span>
+      <h2 class="hd" data-t="testi_h2">Wat gebruikers zeggen</h2>
+      <p data-t="testi_sub">Al honderden kookliefhebbers en gezinnen plannen slimmer.</p>
     </div>
     <div class="tg">
       <div class="tc fu">
         <div class="tc-st">★★★★★</div>
-        <p class="tc-tx">"Ik kook hetzelfde gerecht nu zoveel beter dan een jaar geleden, gewoon doordat ik elke keer mijn notities teruglas. Onmisbaar."</p>
-        <div class="tc-au"><div class="tc-av">👨</div><div><div class="tc-nm">Joost</div><div class="tc-rl">Thuiskok, Amsterdam</div></div></div>
+        <p class="tc-tx" data-t="t1_tx">"Ik kook hetzelfde gerecht nu zoveel beter dan een jaar geleden, gewoon doordat ik elke keer mijn notities teruglas. Onmisbaar."</p>
+        <div class="tc-au"><div class="tc-av">👨</div><div><div class="tc-nm">Joost</div><div class="tc-rl" data-t="t1_rl">Thuiskok, Amsterdam</div></div></div>
       </div>
       <div class="tc fu d1">
         <div class="tc-st">★★★★★</div>
-        <p class="tc-tx">"De AI-tip vóór het koken is geniaal. Het herinnert me precies wat ik de vorige keer anders wilde doen — dat vergeet ik anders altijd."</p>
-        <div class="tc-au"><div class="tc-av">👩</div><div><div class="tc-nm">Lena</div><div class="tc-rl">Utrecht</div></div></div>
+        <p class="tc-tx" data-t="t2_tx">"De AI-tip vóór het koken is geniaal. Het herinnert me precies wat ik de vorige keer anders wilde doen — dat vergeet ik anders altijd."</p>
+        <div class="tc-au"><div class="tc-av">👩</div><div><div class="tc-nm">Lena</div><div class="tc-rl" data-t="t2_rl">Utrecht</div></div></div>
       </div>
       <div class="tc fu d2">
         <div class="tc-st">★★★★★</div>
-        <p class="tc-tx">"Eindelijk geen losse recepten meer overal. Alles in één app met mijn eigen aantekeningen. En de kinderen vinden het stemmen geweldig."</p>
-        <div class="tc-au"><div class="tc-av">👩</div><div><div class="tc-nm">Roos</div><div class="tc-rl">Moeder van 3, Rotterdam</div></div></div>
+        <p class="tc-tx" data-t="t3_tx">"Eindelijk geen losse recepten meer overal. Alles in één app met mijn eigen aantekeningen. En de kinderen vinden het stemmen geweldig."</p>
+        <div class="tc-au"><div class="tc-av">👩</div><div><div class="tc-nm">Roos</div><div class="tc-rl" data-t="t3_rl">Moeder van 3, Rotterdam</div></div></div>
       </div>
     </div>
   </div>
@@ -459,16 +484,16 @@
 <!-- CTA -->
 <section class="cta">
   <div class="wrap">
-    <span class="lbl">Begin vandaag</span>
-    <h2 class="hd">Word elke week<br>een <em>betere kok</em></h2>
-    <p>Bouw je eigen kookgeheugen op. Gratis, zonder app store, direct te gebruiken.</p>
-    <a class="btn btn-g" style="font-size:1.1rem;padding:1rem 2.5rem;" href="https://lekkerstemmen.app?utm_source=landing&utm_medium=cta&utm_campaign=footer" onclick="plausible&&plausible('CTA Footer Click')">Gratis starten →</a>
+    <span class="lbl" data-t="cta_lbl">Begin vandaag</span>
+    <h2 class="hd" data-t="cta_h2">Word elke week<br>een <em>betere kok</em></h2>
+    <p data-t="cta_p">Bouw je eigen kookgeheugen op. Gratis, zonder app store, direct te gebruiken.</p>
+    <a class="btn btn-g" style="font-size:1.1rem;padding:1rem 2.5rem;" href="https://lekkerstemmen.app?utm_source=landing&utm_medium=cta&utm_campaign=footer" onclick="plausible&&plausible('CTA Footer Click')" data-t="cta_btn">Gratis starten →</a>
     <div class="cta-meta">
-      <span>Geen app store nodig</span>
-      <span>Werkt op iPhone &amp; Android</span>
-      <span>Gratis te starten</span>
+      <span data-t="cta_m1">Geen app store nodig</span>
+      <span data-t="cta_m2">Werkt op iPhone &amp; Android</span>
+      <span data-t="cta_m3">Gratis te starten</span>
     </div>
-    <p style="margin-top:1.4rem;font-family:var(--fu);font-size:.78rem;color:var(--muted);">
+    <p style="margin-top:1.4rem;font-family:var(--fu);font-size:.78rem;color:var(--muted);" data-t="cta_terms">
       Door je aan te melden ga je akkoord met onze <a href="/voorwaarden">gebruiksvoorwaarden</a> en <a href="/privacy">privacyverklaring</a>.
     </p>
   </div>
@@ -478,18 +503,196 @@
   <div class="wrap foot-i">
     <span class="foot-logo">🍽️ My Fav <b>Meal</b></span>
     <div class="fl">
-      <a href="https://lekkerstemmen.app">App openen</a>
-      <a href="mailto:info@lekkerstemmen.app">Contact</a>
-      <a href="/privacy">Privacybeleid</a>
-      <a href="/voorwaarden">Gebruiksvoorwaarden</a>
+      <a href="https://lekkerstemmen.app" data-t="foot_app">App openen</a>
+      <a href="mailto:info@lekkerstemmen.app" data-t="foot_contact">Contact</a>
+      <a href="/privacy" data-t="foot_priv">Privacybeleid</a>
+      <a href="/voorwaarden" data-t="foot_terms">Gebruiksvoorwaarden</a>
     </div>
     <span>© 2025 My Fav Meal</span>
   </div>
 </footer>
 
 <script>
-  const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);} }), {threshold:.12});
+  // ── Scroll animations ──────────────────────────────────────
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);}
+  }), {threshold:.12});
   document.querySelectorAll('.fu').forEach(el => io.observe(el));
+
+  // ── Translations ───────────────────────────────────────────
+  const T = {
+    nl: {
+      nav_login:   'Inloggen →',
+      hero_tag:    '🍳 Jouw persoonlijk kookgeheugen',
+      hero_h1:     'Onthoud wat je kookt.<br>Leer wat je <em>echt</em> lekker vindt.',
+      hero_sub:    'My Fav Meal bouwt een levende receptenbibliotheek voor jou op — inclusief kookhistorie, persoonlijke notities en AI-tips om elk gerecht de volgende keer nóg beter te maken.',
+      cta_hero:    'Gratis starten →',
+      hero_fn:     '<span>✓</span> Geen app store &nbsp;·&nbsp; <span>✓</span> iPhone & Android &nbsp;·&nbsp; <span>✓</span> Gratis',
+      badge:       'AI-tip klaar voor vanavond ✨',
+      chip1: '⏱ 25 min', chip2: '👥 4 pers.', chip3: '6× gekookt',
+      notes_label: 'Jouw aantekeningen',
+      notes_text:  '"Vorige keer iets te zout — minder pancetta én geen extra zout in het pastawater."',
+      history_label: 'Historie',
+      stat1: 'Eigen receptenbibliotheek', stat2: 'Notities per kookbeurt',
+      stat3: 'AI-verbeteradvies',         stat4: 'Weekmenu planner',
+      how_lbl: 'Zo werkt het',
+      how_h2:  'Van recept tot rijke kookhistorie',
+      how_sub: 'Elke maaltijd die je maakt, maakt je bibliotheek slimmer — en jou een betere kok.',
+      how1_h: 'Voeg recepten toe',
+      how1_p: 'Maak een foto en AI herkent het gerecht, vult ingrediënten en recept automatisch in. Of typ een naam en laat AI een recept schrijven.',
+      how2_h: 'Kook & maak een notitie',
+      how2_p: 'Tijdens of na het koken schrijf je wat je opviel — te zout, te kort gebakken, anders gekruid. Precies wat je de volgende keer wil onthouden.',
+      how3_h: 'Word beter, elke keer',
+      how3_p: 'De volgende keer zie je direct je eigen notities en een AI-tip op basis van je hele kookhistorie. Elk gerecht ontwikkelt zich.',
+      hist_lbl: 'Kookhistorie',
+      hist_h2:  'Jouw <em>persoonlijk</em><br>kookdagboek',
+      hist_p:   'Elke keer dat je een gerecht maakt, groeit je kennis. My Fav Meal onthoudt hoe elk gerecht smaakte, wat je erover schreef en hoe het zich over de tijd ontwikkelt. De volgende keer lees je precies terug wat je anders wilde doen.',
+      hist_pt1: 'Schrijf een notitie per kookbeurt — wat je anders deed, wil proberen of aanpassen',
+      hist_pt2: 'Zie hoe je beoordeling van een gerecht over meerdere kookbeurten verbetert',
+      hist_pt3: 'AI leest je notities en geeft een concreet verbeter-advies vóórdat je de keuken in gaat',
+      hist_pt4: 'Plan je weekmenu op basis van wat jullie écht graag eten',
+      tl1_dt: '3 weken geleden', tl1_nt: '"Te zout, iets minder pancetta volgende keer."',
+      tl2_dt: '2 weken geleden', tl2_nt: '"Guanciale geprobeerd in plaats van pancetta — beter!"',
+      tl3_dt: 'Vanavond',
+      tl3_tip: '<b>AI-tip:</b> Voeg ei en kaas van het vuur toe voor een romige saus — voorkomt dat het stolt.',
+      feat_lbl: 'Alles in één app', feat_h2: 'Wat je krijgt',
+      feat_sub: 'Van recepten opslaan tot weekmenu plannen — My Fav Meal heeft het allemaal.',
+      f1_h: 'Foto → volledig recept',
+      f1_p: 'Maak een foto van je gerecht. AI herkent wat het is en vult naam, ingrediënten en bereidingswijze automatisch in. Je bibliotheek groeit zonder tikwerk.',
+      f2_h: 'Weekmenu plannen', f2_tag: 'Planning',
+      f2_p: 'Stel het weekmenu samen uit je eigen receptenbibliotheek. Zie per dag wie thuis is, wie sport heeft en hoeveel tijd je hebt om te koken.',
+      f3_h: 'Boodschappenlijst',
+      f3_p: 'Selecteer de dagen en AI genereert een complete boodschappenlijst die je kunt delen of kopiëren.',
+      f4_h: 'Statistieken',
+      f4_p: 'Zie welke gerechten het populairst zijn en hoe je smaak zich over tijd ontwikkelt.',
+      f5_h: 'Voor het hele gezin', f5_tag: 'Gezinsvriendelijk',
+      f5_p: 'Gezinsleden stemmen op hun favorieten. De kok stelt het weekmenu samen op basis van de stemmen — eerlijk en gezellig.',
+      f6_h: 'Recepten delen',
+      f6_p: 'Koppel bevriende gezinnen via een code en wissel recepten uit voor nieuwe inspiratie.',
+      ai_lbl: 'AI-assistent',
+      ai_h2:  'Een slimme kok<br><em>die jou kent</em>',
+      ai_p:   'My Fav Meal leert van elke maaltijd die je maakt. Hoe meer je kookt, hoe persoonlijker het advies — zonder dat je er iets extra voor hoeft te doen.',
+      pill1: '📸 Gerecht herkennen', pill2: '✦ Kooktips op maat',
+      pill3: '🛒 Boodschappenlijst',  pill4: '📈 Smaakanalyse', pill5: '📝 Receptgeneratie',
+      aic1_h: 'Foto herkenning',   aic1_p: 'Foto maken = recept klaar. AI vult alles automatisch in.',
+      aic2_h: 'Verbeter-advies',   aic2_p: 'Op basis van jouw notities geeft AI een concreet kooktip.',
+      aic3_h: 'Recept genereren',  aic3_p: 'Typ een gerechtnaam — AI schrijft een volledig recept.',
+      aic4_h: 'Eetpatroon analyse',aic4_p: 'Persoonlijk inzicht in wat je graag eet en wanneer.',
+      testi_lbl: 'Ervaringen', testi_h2: 'Wat gebruikers zeggen',
+      testi_sub: 'Al honderden kookliefhebbers en gezinnen plannen slimmer.',
+      t1_tx: '"Ik kook hetzelfde gerecht nu zoveel beter dan een jaar geleden, gewoon doordat ik elke keer mijn notities teruglas. Onmisbaar."',
+      t1_rl: 'Thuiskok, Amsterdam',
+      t2_tx: '"De AI-tip vóór het koken is geniaal. Het herinnert me precies wat ik de vorige keer anders wilde doen — dat vergeet ik anders altijd."',
+      t2_rl: 'Utrecht',
+      t3_tx: '"Eindelijk geen losse recepten meer overal. Alles in één app met mijn eigen aantekeningen. En de kinderen vinden het stemmen geweldig."',
+      t3_rl: 'Moeder van 3, Rotterdam',
+      cta_lbl: 'Begin vandaag',
+      cta_h2:  'Word elke week<br>een <em>betere kok</em>',
+      cta_p:   'Bouw je eigen kookgeheugen op. Gratis, zonder app store, direct te gebruiken.',
+      cta_btn: 'Gratis starten →',
+      cta_m1: 'Geen app store nodig', cta_m2: 'Werkt op iPhone & Android', cta_m3: 'Gratis te starten',
+      cta_terms: 'Door je aan te melden ga je akkoord met onze <a href="/voorwaarden">gebruiksvoorwaarden</a> en <a href="/privacy">privacyverklaring</a>.',
+      foot_app: 'App openen', foot_contact: 'Contact', foot_priv: 'Privacybeleid', foot_terms: 'Gebruiksvoorwaarden',
+    },
+    en: {
+      nav_login:   'Log in →',
+      hero_tag:    '🍳 Your personal cooking memory',
+      hero_h1:     'Remember what you cook.<br>Learn what you <em>truly</em> love.',
+      hero_sub:    'My Fav Meal builds a living recipe library for you — including cooking history, personal notes, and AI tips to make every dish even better next time.',
+      cta_hero:    'Start for free →',
+      hero_fn:     '<span>✓</span> No app store needed &nbsp;·&nbsp; <span>✓</span> iPhone & Android &nbsp;·&nbsp; <span>✓</span> Free',
+      badge:       'AI tip ready for tonight ✨',
+      chip1: '⏱ 25 min', chip2: '👥 4 servings', chip3: 'Cooked 6×',
+      notes_label: 'Your notes',
+      notes_text:  '"A bit too salty last time — less pancetta and no extra salt in the pasta water."',
+      history_label: 'History',
+      stat1: 'Your own recipe library', stat2: 'Notes per cooking session',
+      stat3: 'AI improvement tips',      stat4: 'Weekly menu planner',
+      how_lbl: 'How it works',
+      how_h2:  'From recipe to rich cooking history',
+      how_sub: 'Every meal you make makes your library smarter — and you a better cook.',
+      how1_h: 'Add your recipes',
+      how1_p: 'Take a photo and AI recognises the dish, filling in ingredients and instructions automatically. Or type a name and let AI write a recipe.',
+      how2_h: 'Cook & take a note',
+      how2_p: 'During or after cooking, jot down what you noticed — too salty, undercooked, seasoned differently. Exactly what you want to remember next time.',
+      how3_h: 'Get better, every time',
+      how3_p: 'Next time you cook it, you see your own notes and an AI tip based on your full cooking history. Every dish evolves.',
+      hist_lbl: 'Cooking history',
+      hist_h2:  'Your <em>personal</em><br>cooking journal',
+      hist_p:   'Every time you make a dish, your knowledge grows. My Fav Meal remembers how each dish tasted, what you wrote about it, and how it develops over time. Next time, you read back exactly what you wanted to do differently.',
+      hist_pt1: 'Write a note per cooking session — what you changed, want to try, or adjust',
+      hist_pt2: 'See how your rating for a dish improves over multiple cooking sessions',
+      hist_pt3: 'AI reads your notes and gives concrete improvement advice before you enter the kitchen',
+      hist_pt4: 'Plan your weekly menu based on what you genuinely enjoy eating',
+      tl1_dt: '3 weeks ago',  tl1_nt: '"Too salty — a little less pancetta next time."',
+      tl2_dt: '2 weeks ago',  tl2_nt: '"Tried guanciale instead of pancetta — much better!"',
+      tl3_dt: 'Tonight',
+      tl3_tip: '<b>AI tip:</b> Add egg and cheese off the heat for a creamy sauce — prevents it from scrambling.',
+      feat_lbl: 'Everything in one app', feat_h2: 'What you get',
+      feat_sub: 'From saving recipes to planning your weekly menu — My Fav Meal has it all.',
+      f1_h: 'Photo → full recipe',
+      f1_p: 'Take a photo of your dish. AI recognises it and automatically fills in the name, ingredients, and preparation. Your library grows without any typing.',
+      f2_h: 'Plan your weekly menu', f2_tag: 'Planning',
+      f2_p: 'Build your weekly menu from your own recipe library. See per day who is home, who has sports, and how much time you have to cook.',
+      f3_h: 'Shopping list',
+      f3_p: 'Select the days you are shopping for and AI generates a complete list you can share or copy.',
+      f4_h: 'Statistics',
+      f4_p: 'See which dishes are most popular and how your taste develops over time.',
+      f5_h: 'For the whole family', f5_tag: 'Family-friendly',
+      f5_p: 'Family members vote for their favourites. The cook builds the weekly menu based on the votes — fair and fun.',
+      f6_h: 'Share recipes',
+      f6_p: 'Connect friendly families via a code and exchange recipes for fresh inspiration.',
+      ai_lbl: 'AI assistant',
+      ai_h2:  'A smart cook<br><em>who knows you</em>',
+      ai_p:   'My Fav Meal learns from every meal you make. The more you cook, the more personal the advice — without any extra effort from you.',
+      pill1: '📸 Dish recognition', pill2: '✦ Personalised tips',
+      pill3: '🛒 Shopping list',     pill4: '📈 Taste analysis', pill5: '📝 Recipe generation',
+      aic1_h: 'Photo recognition', aic1_p: 'Take a photo = recipe ready. AI fills everything in automatically.',
+      aic2_h: 'Improvement tips',  aic2_p: 'Based on your notes, AI gives a concrete cooking tip.',
+      aic3_h: 'Recipe generation', aic3_p: 'Type a dish name — AI writes a complete recipe.',
+      aic4_h: 'Eating pattern analysis', aic4_p: 'Personal insight into what you enjoy eating and when.',
+      testi_lbl: 'Reviews', testi_h2: 'What users say',
+      testi_sub: 'Hundreds of cooking enthusiasts and families plan smarter.',
+      t1_tx: '"I cook the same dish so much better than a year ago, simply because I read back my notes every time. Indispensable."',
+      t1_rl: 'Home cook, Amsterdam',
+      t2_tx: '"The AI tip before cooking is brilliant. It reminds me exactly what I wanted to do differently last time — I always forget otherwise."',
+      t2_rl: 'Utrecht',
+      t3_tx: '"Finally no more scattered recipes everywhere. Everything in one app with my own notes. And the kids love voting for their favourites."',
+      t3_rl: 'Mother of 3, Rotterdam',
+      cta_lbl: 'Start today',
+      cta_h2:  'Become a better cook<br><em>every week</em>',
+      cta_p:   'Build your own cooking memory. Free, no app store, ready to use right now.',
+      cta_btn: 'Start for free →',
+      cta_m1: 'No app store needed', cta_m2: 'Works on iPhone & Android', cta_m3: 'Free to start',
+      cta_terms: 'By signing up you agree to our <a href="/voorwaarden">terms of use</a> and <a href="/privacy">privacy policy</a>.',
+      foot_app: 'Open app', foot_contact: 'Contact', foot_priv: 'Privacy policy', foot_terms: 'Terms of use',
+    }
+  };
+
+  let currentLang = 'nl';
+
+  function setLang(lang) {
+    currentLang = lang;
+    const t = T[lang];
+    document.documentElement.lang = lang;
+
+    // Update all translated elements
+    document.querySelectorAll('[data-t]').forEach(el => {
+      const key = el.getAttribute('data-t');
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+
+    // Toggle button states
+    document.getElementById('btn-nl').classList.toggle('active', lang === 'nl');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+    // Track language switch
+    if (typeof plausible !== 'undefined') plausible('Language Switch', {props: {lang}});
+  }
+
+  // Auto-detect browser language on load
+  const browserLang = navigator.language?.slice(0,2);
+  if (browserLang === 'en') setLang('en');
 </script>
 </body>
 </html>
