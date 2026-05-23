@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Fav Meal — Jouw persoonlijk kookgeheugen</title>
+  <meta name="description" content="My Fav Meal onthoudt wat je kookt, hoe het smaakte en hoe je het de volgende keer nóg beter maakt. Recepten, kookhistorie en weekmenu in één app." />
+  <meta property="og:title" content="My Fav Meal — Jouw persoonlijk kookgeheugen" />
+  <meta property="og:description" content="Onthoudt wat je kookt, hoe het smaakte en hoe je het de volgende keer nóg beter maakt." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://myfavmeal.com" />
+  <meta property="og:image" content="https://myfavmeal.com/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script defer data-domain="myfavmeal.com" src="https://plausible.io/js/script.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,500&family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --green:      #1D9E75;
+      --green-dk:   #158a62;
+      --green-lt:   #E8F7F2;
+      --green-mid:  #a8dfc9;
+      --cream:      #faf7f2;
+      --warm-50:    #f5ede0;
+      --warm-100:   #eddcca;
+      --bark:       #3d2b1f;
+      --bark-s:     #5c4033;
+      --text:       #2a1f18;
+      --muted:      #7a6456;
+      --line:       rgba(61,43,31,.1);
+      --dark:       #1A1A2E;
+      --r:          16px;
+      --rb:         99px;
+      --fd:         'Fraunces', Georgia, serif;
+      --fb:         'Lora', Georgia, serif;
+      --fu:         'DM Sans', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--fb); background: var(--cream); color: var(--text); line-height: 1.65; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: 90%; max-width: 1080px; margin: 0 auto; }
+    .btn { display: inline-flex; align-items: center; gap: .45em; font-family: var(--fu); font-weight: 500; font-size: 1rem; padding: .85em 2em; border-radius: var(--rb); border: none; cursor: pointer; transition: background .2s, transform .15s, box-shadow .2s; text-decoration: none; }
+    .btn-g { background: var(--green); color: #fff; box-shadow: 0 4px 22px rgba(29,158,117,.3); }
+    .btn-g:hover { background: var(--green-dk); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(29,158,117,.4); }
+    .btn-o { background: transparent; color: var(--green); border: 2px solid var(--green); }
+    .btn-o:hover { background: var(--green); color: #fff; }
+    .lbl { font-family: var(--fu); font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--green); display: block; margin-bottom: .7rem; }
+    .hd { font-family: var(--fd); line-height: 1.1; font-weight: 700; color: var(--text); }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(250,247,242,.93); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .nav-i { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; }
+    .nav-logo { font-family: var(--fd); font-size: 1.2rem; font-weight: 500; display: flex; align-items: center; gap: .4em; }
+    .nav-logo b { color: var(--green); font-weight: 700; }
+
+    /* HERO */
+    .hero { padding: 5rem 0 0; position: relative; overflow: hidden; }
+    .blob1 { position: absolute; top: -100px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #e4f5ee 0%, transparent 65%); pointer-events: none; }
+    .blob2 { position: absolute; bottom: 60px; left: -120px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, var(--warm-50) 0%, transparent 70%); pointer-events: none; }
+    .hero-i { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: end; }
+    .hero-copy { padding-bottom: 4rem; }
+    .hero-tag { display: inline-flex; align-items: center; gap: .45em; background: var(--warm-50); color: var(--bark-s); font-family: var(--fu); font-size: .8rem; font-weight: 500; padding: .35em 1em; border-radius: 99px; margin-bottom: 1.5rem; border: 1px solid var(--warm-100); }
+    .hero h1 { font-size: clamp(2.6rem, 5.5vw, 4rem); margin-bottom: 1.25rem; }
+    .hero h1 em { font-style: italic; color: var(--green); }
+    .hero-sub { font-family: var(--fu); font-size: 1.05rem; color: var(--muted); max-width: 420px; margin-bottom: 2.2rem; line-height: 1.7; }
+    .hero-act { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+    .hero-fn { margin-top: 1.1rem; font-family: var(--fu); font-size: .78rem; color: var(--muted); }
+    .hero-fn span { color: var(--green); }
+
+    /* Phone visual */
+    .hero-vis { position: relative; display: flex; flex-direction: column; }
+    .rc { background: #fff; border-radius: 20px 20px 0 0; box-shadow: 0 -8px 40px rgba(61,43,31,.12); overflow: hidden; max-width: 320px; margin: 0 auto; animation: riseup .9s cubic-bezier(.22,1,.36,1) both; }
+    @keyframes riseup { from { opacity:0; transform:translateY(40px); } to { opacity:1; transform:translateY(0); } }
+    .rc-img { width: 100%; height: 160px; background: linear-gradient(135deg, #1f4030 0%, #0d2418 100%); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; }
+    .rc-img-ov { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 35%, rgba(0,0,0,.5)); }
+    .rc-img-name { position: absolute; bottom: 10px; left: 14px; font-family: var(--fd); font-size: 1rem; font-weight: 600; color: #fff; z-index: 1; }
+    .rc-img-sc { position: absolute; bottom: 10px; right: 12px; background: var(--green); color: #fff; font-family: var(--fu); font-size: .68rem; font-weight: 600; padding: .2em .65em; border-radius: 99px; z-index: 1; }
+    .rc-body { padding: 1rem 1.2rem 1.2rem; }
+    .rc-chips { display: flex; gap: .4rem; margin-bottom: .7rem; flex-wrap: wrap; }
+    .chip { font-family: var(--fu); font-size: .67rem; font-weight: 500; background: var(--green-lt); color: var(--green-dk); padding: .2em .65em; border-radius: 99px; }
+    .rc-nl { font-family: var(--fu); font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: .3rem; }
+    .rc-note { font-family: var(--fb); font-size: .8rem; font-style: italic; color: var(--bark-s); line-height: 1.5; padding: .5rem .7rem; background: var(--warm-50); border-radius: 8px; border-left: 3px solid var(--green-mid); }
+    .hs { max-width: 320px; margin: 0 auto; background: var(--dark); border-radius: 0 0 20px 20px; padding: .8rem 1.2rem; display: flex; gap: .7rem; align-items: center; animation: riseup .9s cubic-bezier(.22,1,.36,1) .12s both; }
+    .hs-lbl { font-family: var(--fu); font-size: .63rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.3); flex-shrink: 0; }
+    .hs-dots { display: flex; gap: .35rem; flex: 1; }
+    .hd2 { width: 26px; height: 26px; border-radius: 50%; font-size: .8rem; display: grid; place-items: center; }
+    .hd2.hi { background: var(--green); }
+    .hd2.ok { background: rgba(255,255,255,.1); }
+    .hd2.lo { background: rgba(255,255,255,.05); }
+    .hs-ai { font-family: var(--fu); font-size: .63rem; color: rgba(29,158,117,.8); font-weight: 500; flex-shrink: 0; }
+    .fbadge { position: absolute; top: 18px; right: -12px; background: #fff; border-radius: 12px; padding: .6rem .85rem; box-shadow: 0 8px 28px rgba(61,43,31,.15); font-family: var(--fu); font-size: .73rem; font-weight: 600; display: flex; align-items: center; gap: .4em; animation: float 4s ease-in-out infinite; white-space: nowrap; z-index: 2; }
+    .fdot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    @keyframes float { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-8px) rotate(1deg); } }
+
+    /* STATS */
+    .stats { background: var(--dark); padding: 2rem 0; }
+    .stats-i { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1.5rem; }
+    .st { text-align: center; }
+    .st-n { font-family: var(--fd); font-size: 2rem; font-weight: 700; color: var(--green); display: block; line-height: 1; }
+    .st-d { font-family: var(--fu); font-size: .78rem; color: rgba(255,255,255,.38); margin-top: .3rem; }
+
+    /* HOW */
+    .how { padding: 5.5rem 0; }
+    .how-h { text-align: center; margin-bottom: 4rem; }
+    .how-h h2 { font-size: clamp(1.9rem, 3.5vw, 2.7rem); margin-bottom: .6rem; }
+    .how-h p { font-family: var(--fu); color: var(--muted); max-width: 440px; margin: 0 auto; }
+    .how-g { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; position: relative; }
+    .how-g::before { content:''; position: absolute; top: 44px; left: calc(16.67% + 20px); right: calc(16.67% + 20px); height: 2px; background: linear-gradient(to right, var(--green-mid), var(--green), var(--green-mid)); z-index: 0; }
+    .how-s { text-align: center; padding: 0 1.5rem; position: relative; z-index: 1; }
+    .how-ic { width: 88px; height: 88px; border-radius: 50%; background: var(--green-lt); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--green-mid); font-size: 2rem; display: grid; place-items: center; margin: 0 auto 1.5rem; }
+    .how-s h3 { font-family: var(--fd); font-size: 1.15rem; font-weight: 600; margin-bottom: .45rem; }
+    .how-s p { font-family: var(--fu); font-size: .88rem; color: var(--muted); line-height: 1.6; }
+
+    /* HISTORY */
+    .hist-sec { background: var(--warm-50); padding: 5.5rem 0; position: relative; overflow: hidden; }
+    .hist-sec::before { content:'"'; position: absolute; top: -80px; left: -20px; font-family: var(--fd); font-size: 26rem; font-weight: 700; color: rgba(29,158,117,.04); line-height: 1; pointer-events: none; }
+    .hist-i { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .hist-copy h2 { font-size: clamp(1.9rem, 3.5vw, 2.7rem); margin-bottom: 1rem; }
+    .hist-copy p { font-family: var(--fu); color: var(--muted); margin-bottom: 1.5rem; line-height: 1.7; font-size: .97rem; }
+    .pts { list-style: none; display: flex; flex-direction: column; gap: .85rem; }
+    .pts li { display: flex; gap: .85rem; align-items: flex-start; font-family: var(--fu); font-size: .93rem; }
+    .pt-ic { width: 32px; height: 32px; border-radius: 50%; background: var(--green); color: #fff; flex-shrink: 0; display: grid; place-items: center; font-size: .85rem; margin-top: 1px; }
+    /* Timeline */
+    .tl { display: flex; flex-direction: column; position: relative; }
+    .tl::before { content:''; position: absolute; left: 21px; top: 20px; bottom: 20px; width: 2px; background: linear-gradient(to bottom, var(--green-mid), var(--green), var(--green-mid)); }
+    .tl-it { display: flex; gap: 1rem; align-items: flex-start; padding: .9rem 0; position: relative; }
+    .tl-dot { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-size: 1.25rem; background: #fff; border: 3px solid var(--green-mid); box-shadow: 0 2px 10px rgba(29,158,117,.1); position: relative; z-index: 1; }
+    .tl-dot.on { background: var(--green); border-color: var(--green); }
+    .tl-bd { flex: 1; padding-top: .45rem; }
+    .tl-dt { font-family: var(--fu); font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: .12rem; }
+    .tl-ti { font-family: var(--fd); font-size: 1rem; font-weight: 600; margin-bottom: .2rem; }
+    .tl-nt { font-family: var(--fb); font-size: .8rem; font-style: italic; color: var(--bark-s); line-height: 1.45; }
+    .tl-sc { display: flex; gap: .15rem; margin-top: .25rem; }
+    .sr { color: var(--green); font-size: .72rem; }
+    .sr.d { color: var(--warm-100); }
+    .tl-tip { margin-top: .4rem; background: var(--green-lt); border-radius: 8px; padding: .4rem .65rem; font-family: var(--fu); font-size: .7rem; color: var(--green-dk); display: flex; gap: .4em; align-items: flex-start; line-height: 1.45; }
+
+    /* FEATURES */
+    .feats { padding: 5.5rem 0; }
+    .feats-h { text-align: center; margin-bottom: 3.5rem; }
+    .feats-h h2 { font-size: clamp(1.9rem, 3.5vw, 2.7rem); margin-bottom: .6rem; }
+    .feats-h p { font-family: var(--fu); color: var(--muted); max-width: 420px; margin: 0 auto; }
+    .fg { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.2rem; }
+    .fc { background: #fff; border: 1px solid var(--line); border-radius: var(--r); padding: 1.6rem 1.4rem; transition: box-shadow .25s, transform .2s; }
+    .fc:hover { box-shadow: 0 10px 34px rgba(61,43,31,.09); transform: translateY(-3px); }
+    .fc.w2 { grid-column: span 2; }
+    .fc-em { font-size: 1.8rem; margin-bottom: .75rem; }
+    .fc h3 { font-family: var(--fd); font-size: 1.05rem; font-weight: 600; margin-bottom: .4rem; }
+    .fc p { font-family: var(--fu); font-size: .84rem; color: var(--muted); line-height: 1.55; }
+    .fc-tag { display: inline-block; margin-top: .55rem; font-family: var(--fu); font-size: .67rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--green); background: var(--green-lt); padding: .2em .65em; border-radius: 99px; }
+
+    /* AI */
+    .ai { background: var(--dark); padding: 5.5rem 0; position: relative; overflow: hidden; }
+    .ai::after { content:'✦'; position: absolute; right: 4%; top: 15%; font-size: 18rem; color: rgba(29,158,117,.05); pointer-events: none; line-height: 1; }
+    .ai-i { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .ai-c h2 { font-size: clamp(1.9rem, 3.5vw, 2.7rem); color: #fff; margin-bottom: .85rem; }
+    .ai-c h2 em { font-style: italic; color: var(--green); }
+    .ai-c p { font-family: var(--fu); color: rgba(255,255,255,.48); margin-bottom: 2rem; line-height: 1.7; }
+    .ai-pills { display: flex; flex-wrap: wrap; gap: .55rem; }
+    .ai-pl { font-family: var(--fu); font-size: .8rem; font-weight: 500; background: rgba(29,158,117,.14); color: var(--green); border: 1px solid rgba(29,158,117,.22); padding: .38em 1em; border-radius: 99px; }
+    .ai-g { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .ai-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: var(--r); padding: 1.35rem 1.2rem; transition: background .2s, border-color .2s; }
+    .ai-card:hover { background: rgba(29,158,117,.1); border-color: rgba(29,158,117,.22); }
+    .ai-card-ic { font-size: 1.5rem; margin-bottom: .55rem; }
+    .ai-card h4 { font-family: var(--fd); font-size: .93rem; font-weight: 600; color: #fff; margin-bottom: .28rem; }
+    .ai-card p { font-family: var(--fu); font-size: .77rem; color: rgba(255,255,255,.38); line-height: 1.5; }
+
+    /* TESTI */
+    .testi { padding: 5.5rem 0; background: var(--green-lt); }
+    .testi-h { text-align: center; margin-bottom: 3rem; }
+    .testi-h h2 { font-size: clamp(1.9rem, 3.5vw, 2.6rem); margin-bottom: .5rem; }
+    .testi-h p { font-family: var(--fu); color: var(--muted); }
+    .tg { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .tc { background: #fff; border-radius: var(--r); padding: 1.75rem 1.6rem; box-shadow: 0 4px 18px rgba(29,158,117,.07); }
+    .tc-st { color: var(--green); font-size: 1rem; margin-bottom: .75rem; }
+    .tc-tx { font-family: var(--fd); font-size: 1rem; font-style: italic; line-height: 1.6; color: var(--text); margin-bottom: 1.1rem; }
+    .tc-au { display: flex; align-items: center; gap: .7rem; }
+    .tc-av { width: 36px; height: 36px; border-radius: 50%; background: var(--warm-50); display: grid; place-items: center; font-size: 1rem; }
+    .tc-nm { font-family: var(--fu); font-size: .84rem; font-weight: 600; }
+    .tc-rl { font-family: var(--fu); font-size: .74rem; color: var(--muted); }
+
+    /* CTA */
+    .cta { padding: 7rem 0 6rem; text-align: center; position: relative; overflow: hidden; }
+    .cta::before { content:''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 400px; background: radial-gradient(ellipse, rgba(29,158,117,.07) 0%, transparent 70%); pointer-events: none; }
+    .cta h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); margin-bottom: .75rem; }
+    .cta h2 em { font-style: italic; color: var(--green); }
+    .cta p { font-family: var(--fu); color: var(--muted); max-width: 400px; margin: 0 auto 2.5rem; }
+    .cta-meta { margin-top: 1.4rem; font-family: var(--fu); font-size: .78rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; justify-content: center; }
+    .cta-meta a { color: var(--green); text-decoration: underline; }
+
+    /* FOOTER */
+    footer { background: var(--dark); color: rgba(255,255,255,.38); padding: 2.5rem 0; font-family: var(--fu); font-size: .82rem; }
+    .foot-i { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .foot-logo { font-family: var(--fd); font-size: 1rem; font-weight: 500; color: rgba(255,255,255,.8); }
+    .foot-logo b { color: var(--green); }
+    .fl { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .fl a { color: rgba(255,255,255,.38); transition: color .2s; }
+    .fl a:hover { color: var(--green); }
+
+    /* ANIM */
+    .fu { opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s ease; }
+    .fu.vis { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: .1s; } .d2 { transition-delay: .22s; } .d3 { transition-delay: .34s; }
+
+    /* RESPONSIVE */
+    @media (max-width: 920px) {
+      .hero-i { grid-template-columns: 1fr; text-align: center; }
+      .hero-sub { margin: 0 auto 2.2rem; }
+      .hero-act { justify-content: center; }
+      .hero-vis { order: -1; }
+      .fbadge { right: 10px; }
+      .how-g { grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; }
+      .how-g::before { display: none; }
+      .hist-i { grid-template-columns: 1fr; }
+      .fg { grid-template-columns: repeat(2,1fr); }
+      .fc.w2 { grid-column: span 2; }
+      .ai-i { grid-template-columns: 1fr; }
+      .tg { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
+    }
+    @media (max-width: 580px) {
+      .fg { grid-template-columns: 1fr; }
+      .fc.w2 { grid-column: span 1; }
+      .ai-g { grid-template-columns: 1fr; }
+      .foot-i { flex-direction: column; text-align: center; }
+      .fl { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-i">
+    <a class="nav-logo" href="#">🍽️ My Fav <b>Meal</b></a>
+    <a class="btn btn-o" style="font-size:.88rem;padding:.6em 1.4em;" href="https://lekkerstemmen.app">Inloggen →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob1"></div><div class="blob2"></div>
+  <div class="wrap hero-i">
+    <div class="hero-copy">
+      <div class="hero-tag">🍳 Jouw persoonlijk kookgeheugen</div>
+      <h1 class="hd">Onthoud wat je kookt.<br>Leer wat je <em>echt</em> lekker vindt.</h1>
+      <p class="hero-sub">My Fav Meal bouwt een levende receptenbibliotheek voor jou op — inclusief kookhistorie, persoonlijke notities en AI-tips om elk gerecht de volgende keer nóg beter te maken.</p>
+      <div class="hero-act">
+        <a class="btn btn-g" href="https://lekkerstemmen.app?utm_source=landing&utm_medium=cta&utm_campaign=hero" onclick="plausible&&plausible('CTA Hero Click')">Gratis starten →</a>
+      </div>
+      <p class="hero-fn"><span>✓</span> Geen app store &nbsp;·&nbsp; <span>✓</span> iPhone & Android &nbsp;·&nbsp; <span>✓</span> Gratis</p>
+    </div>
+    <div class="hero-vis">
+      <div class="fbadge"><span class="fdot"></span>AI-tip klaar voor vanavond ✨</div>
+      <div class="rc">
+        <div class="rc-img">🍝<div class="rc-img-ov"></div><span class="rc-img-name">Spaghetti carbonara</span><span class="rc-img-sc">😋 4.6</span></div>
+        <div class="rc-body">
+          <div class="rc-chips"><span class="chip">⏱ 25 min</span><span class="chip">👥 4 pers.</span><span class="chip">6× gekookt</span></div>
+          <div class="rc-nl">Jouw aantekeningen</div>
+          <div class="rc-note">"Vorige keer iets te zout — minder pancetta én geen extra zout in het pastawater."</div>
+        </div>
+      </div>
+      <div class="hs">
+        <span class="hs-lbl">Historie</span>
+        <div class="hs-dots">
+          <div class="hd2 hi">😋</div><div class="hd2 ok">😐</div>
+          <div class="hd2 hi">😋</div><div class="hd2 hi">😋</div>
+          <div class="hd2 lo">😕</div><div class="hd2 hi">😋</div>
+        </div>
+        <span class="hs-ai">✦ AI-tip</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="wrap stats-i">
+    <div class="st"><span class="st-n">📖</span><span class="st-d">Eigen receptenbibliotheek</span></div>
+    <div class="st"><span class="st-n">📝</span><span class="st-d">Notities per kookbeurt</span></div>
+    <div class="st"><span class="st-n">✦</span><span class="st-d">AI-verbeteradvies</span></div>
+    <div class="st"><span class="st-n">🗓</span><span class="st-d">Weekmenu planner</span></div>
+  </div>
+</div>
+
+<!-- HOW -->
+<section class="how">
+  <div class="wrap">
+    <div class="how-h">
+      <span class="lbl">Zo werkt het</span>
+      <h2 class="hd">Van recept tot rijke kookhistorie</h2>
+      <p>Elke maaltijd die je maakt, maakt je bibliotheek slimmer — en jou een betere kok.</p>
+    </div>
+    <div class="how-g">
+      <div class="how-s fu">
+        <div class="how-ic">📖</div>
+        <h3>Voeg recepten toe</h3>
+        <p>Maak een foto en AI herkent het gerecht, vult ingrediënten en recept automatisch in. Of typ een naam en laat AI een recept schrijven.</p>
+      </div>
+      <div class="how-s fu d1">
+        <div class="how-ic">🍳</div>
+        <h3>Kook & maak een notitie</h3>
+        <p>Tijdens of na het koken schrijf je wat je opviel — te zout, te kort gebakken, anders gekruid. Precies wat je de volgende keer wil onthouden.</p>
+      </div>
+      <div class="how-s fu d2">
+        <div class="how-ic">✨</div>
+        <h3>Word beter, elke keer</h3>
+        <p>De volgende keer zie je direct je eigen notities en een AI-tip op basis van je hele kookhistorie. Elk gerecht ontwikkelt zich.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY HIGHLIGHT -->
+<section class="hist-sec">
+  <div class="wrap hist-i">
+    <div class="hist-copy fu">
+      <span class="lbl">Kookhistorie</span>
+      <h2 class="hd">Jouw <em>persoonlijk</em><br>kookdagboek</h2>
+      <p>Elke keer dat je een gerecht maakt, groeit je kennis. My Fav Meal onthoudt hoe elk gerecht smaakte, wat je erover schreef en hoe het zich over de tijd ontwikkelt. De volgende keer lees je precies terug wat je anders wilde doen.</p>
+      <ul class="pts">
+        <li><span class="pt-ic">📝</span><span>Schrijf een notitie per kookbeurt — wat je anders deed, wil proberen of aanpassen</span></li>
+        <li><span class="pt-ic">📈</span><span>Zie hoe je beoordeling van een gerecht over meerdere kookbeurten verbetert</span></li>
+        <li><span class="pt-ic">✦</span><span>AI leest je notities en geeft een concreet verbeter-advies vóórdat je de keuken in gaat</span></li>
+        <li><span class="pt-ic">🗓</span><span>Plan je weekmenu op basis van wat jullie écht graag eten</span></li>
+      </ul>
+    </div>
+    <div class="tl fu d1">
+      <div class="tl-it">
+        <div class="tl-dot">🍝</div>
+        <div class="tl-bd">
+          <div class="tl-dt">3 weken geleden</div>
+          <div class="tl-ti">Spaghetti carbonara</div>
+          <div class="tl-nt">"Te zout, iets minder pancetta volgende keer."</div>
+          <div class="tl-sc"><span class="sr">★</span><span class="sr">★</span><span class="sr">★</span><span class="sr d">★</span><span class="sr d">★</span></div>
+        </div>
+      </div>
+      <div class="tl-it">
+        <div class="tl-dot">🍝</div>
+        <div class="tl-bd">
+          <div class="tl-dt">2 weken geleden</div>
+          <div class="tl-ti">Spaghetti carbonara</div>
+          <div class="tl-nt">"Guanciale geprobeerd in plaats van pancetta — beter!"</div>
+          <div class="tl-sc"><span class="sr">★</span><span class="sr">★</span><span class="sr">★</span><span class="sr">★</span><span class="sr d">★</span></div>
+        </div>
+      </div>
+      <div class="tl-it">
+        <div class="tl-dot on">🍝</div>
+        <div class="tl-bd">
+          <div class="tl-dt">Vanavond</div>
+          <div class="tl-ti">Spaghetti carbonara</div>
+          <div class="tl-sc"><span class="sr d">★</span><span class="sr d">★</span><span class="sr d">★</span><span class="sr d">★</span><span class="sr d">★</span></div>
+          <div class="tl-tip">✦ <span><b>AI-tip:</b> Voeg ei en kaas van het vuur toe voor een romige saus — voorkomt dat het stolt.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="feats">
+  <div class="wrap">
+    <div class="feats-h">
+      <span class="lbl">Alles in één app</span>
+      <h2 class="hd">Wat je krijgt</h2>
+      <p>Van recepten opslaan tot weekmenu plannen — My Fav Meal heeft het allemaal.</p>
+    </div>
+    <div class="fg">
+      <div class="fc w2 fu">
+        <div class="fc-em">📸</div>
+        <h3>Foto → volledig recept</h3>
+        <p>Maak een foto van je gerecht. AI herkent wat het is en vult naam, ingrediënten en bereidingswijze automatisch in. Je bibliotheek groeit zonder tikwerk.</p>
+        <span class="fc-tag">AI-powered</span>
+      </div>
+      <div class="fc w2 fu d1">
+        <div class="fc-em">🗓</div>
+        <h3>Weekmenu plannen</h3>
+        <p>Stel het weekmenu samen uit je eigen receptenbibliotheek. Zie per dag wie thuis is, wie sport heeft en hoeveel tijd je hebt om te koken.</p>
+        <span class="fc-tag">Planning</span>
+      </div>
+      <div class="fc fu">
+        <div class="fc-em">🛒</div>
+        <h3>Boodschappenlijst</h3>
+        <p>Selecteer de dagen en AI genereert een complete boodschappenlijst die je kunt delen of kopiëren.</p>
+      </div>
+      <div class="fc fu d1">
+        <div class="fc-em">📊</div>
+        <h3>Statistieken</h3>
+        <p>Zie welke gerechten het populairst zijn en hoe je smaak zich over tijd ontwikkelt.</p>
+      </div>
+      <div class="fc fu d2">
+        <div class="fc-em">👨‍👩‍👧</div>
+        <h3>Voor het hele gezin</h3>
+        <p>Gezinsleden stemmen op hun favorieten. De kok stelt het weekmenu samen op basis van de stemmen — eerlijk en gezellig.</p>
+        <span class="fc-tag">Gezinsvriendelijk</span>
+      </div>
+      <div class="fc fu d3">
+        <div class="fc-em">🤝</div>
+        <h3>Recepten delen</h3>
+        <p>Koppel bevriende gezinnen via een code en wissel recepten uit voor nieuwe inspiratie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI -->
+<section class="ai">
+  <div class="wrap ai-i">
+    <div class="ai-c">
+      <span class="lbl">AI-assistent</span>
+      <h2 class="hd">Een slimme kok<br><em>die jou kent</em></h2>
+      <p>My Fav Meal leert van elke maaltijd die je maakt. Hoe meer je kookt, hoe persoonlijker het advies — zonder dat je er iets extra voor hoeft te doen.</p>
+      <div class="ai-pills">
+        <span class="ai-pl">📸 Gerecht herkennen</span>
+        <span class="ai-pl">✦ Kooktips op maat</span>
+        <span class="ai-pl">🛒 Boodschappenlijst</span>
+        <span class="ai-pl">📈 Smaakanalyse</span>
+        <span class="ai-pl">📝 Receptgeneratie</span>
+      </div>
+    </div>
+    <div class="ai-g">
+      <div class="ai-card fu"><div class="ai-card-ic">📸</div><h4>Foto herkenning</h4><p>Foto maken = recept klaar. AI vult alles automatisch in.</p></div>
+      <div class="ai-card fu d1"><div class="ai-card-ic">✦</div><h4>Verbeter-advies</h4><p>Op basis van jouw notities geeft AI een concreet kooktip.</p></div>
+      <div class="ai-card fu d2"><div class="ai-card-ic">📝</div><h4>Recept genereren</h4><p>Typ een gerechtnaam — AI schrijft een volledig recept.</p></div>
+      <div class="ai-card fu d3"><div class="ai-card-ic">📊</div><h4>Eetpatroon analyse</h4><p>Persoonlijk inzicht in wat je graag eet en wanneer.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi">
+  <div class="wrap">
+    <div class="testi-h">
+      <span class="lbl">Ervaringen</span>
+      <h2 class="hd">Wat gebruikers zeggen</h2>
+      <p>Al honderden kookliefhebbers en gezinnen plannen slimmer.</p>
+    </div>
+    <div class="tg">
+      <div class="tc fu">
+        <div class="tc-st">★★★★★</div>
+        <p class="tc-tx">"Ik kook hetzelfde gerecht nu zoveel beter dan een jaar geleden, gewoon doordat ik elke keer mijn notities teruglas. Onmisbaar."</p>
+        <div class="tc-au"><div class="tc-av">👨</div><div><div class="tc-nm">Joost</div><div class="tc-rl">Thuiskok, Amsterdam</div></div></div>
+      </div>
+      <div class="tc fu d1">
+        <div class="tc-st">★★★★★</div>
+        <p class="tc-tx">"De AI-tip vóór het koken is geniaal. Het herinnert me precies wat ik de vorige keer anders wilde doen — dat vergeet ik anders altijd."</p>
+        <div class="tc-au"><div class="tc-av">👩</div><div><div class="tc-nm">Lena</div><div class="tc-rl">Utrecht</div></div></div>
+      </div>
+      <div class="tc fu d2">
+        <div class="tc-st">★★★★★</div>
+        <p class="tc-tx">"Eindelijk geen losse recepten meer overal. Alles in één app met mijn eigen aantekeningen. En de kinderen vinden het stemmen geweldig."</p>
+        <div class="tc-au"><div class="tc-av">👩</div><div><div class="tc-nm">Roos</div><div class="tc-rl">Moeder van 3, Rotterdam</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <span class="lbl">Begin vandaag</span>
+    <h2 class="hd">Word elke week<br>een <em>betere kok</em></h2>
+    <p>Bouw je eigen kookgeheugen op. Gratis, zonder app store, direct te gebruiken.</p>
+    <a class="btn btn-g" style="font-size:1.1rem;padding:1rem 2.5rem;" href="https://lekkerstemmen.app?utm_source=landing&utm_medium=cta&utm_campaign=footer" onclick="plausible&&plausible('CTA Footer Click')">Gratis starten →</a>
+    <div class="cta-meta">
+      <span>Geen app store nodig</span>
+      <span>Werkt op iPhone &amp; Android</span>
+      <span>Gratis te starten</span>
+    </div>
+    <p style="margin-top:1.4rem;font-family:var(--fu);font-size:.78rem;color:var(--muted);">
+      Door je aan te melden ga je akkoord met onze <a href="/voorwaarden">gebruiksvoorwaarden</a> en <a href="/privacy">privacyverklaring</a>.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-i">
+    <span class="foot-logo">🍽️ My Fav <b>Meal</b></span>
+    <div class="fl">
+      <a href="https://lekkerstemmen.app">App openen</a>
+      <a href="mailto:info@lekkerstemmen.app">Contact</a>
+      <a href="/privacy">Privacybeleid</a>
+      <a href="/voorwaarden">Gebruiksvoorwaarden</a>
+    </div>
+    <span>© 2025 My Fav Meal</span>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);} }), {threshold:.12});
+  document.querySelectorAll('.fu').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
